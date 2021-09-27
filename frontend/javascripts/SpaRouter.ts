@@ -1,6 +1,5 @@
 import StateController from './StateController';
 import { state } from '@Interfaces/interfaces';
-import Component from '@Component/component';
 
 class TypeClass {
   constructor(
@@ -10,7 +9,8 @@ class TypeClass {
   ) {}
 }
 
-class SpaRouter {
+abstract class SpaRouter {
+
   protected $body: HTMLElement;
   protected store: state;
   protected stackPath: Array<string>;
@@ -28,16 +28,24 @@ class SpaRouter {
     this.addRouterEvent();
   }
 
-  setRoutes() {}
+  abstract setRoutes() : void;
 
-  addRouterEvent() {}
+  abstract addRouterEvent() : void;
 
-  notify(currentPath: string) {
+  notify(currentPath: string) : void {
+
+    const nowPath: string = window.location.pathname;
+
+    if(nowPath === currentPath){
+
+      return;
+    }
+
     this.historyRouterPush(currentPath);
     this.initialRoutes(this.$body, currentPath);
   }
 
-  render(baseElement: HTMLElement, pathName: string = '/') {
+  render(baseElement: HTMLElement, pathName: string = '/') : void {
     baseElement.innerHTML = '';
 
     const now = this.routes[pathName];
@@ -47,7 +55,7 @@ class SpaRouter {
     });
   }
 
-  initialRoutes(baseElement: HTMLElement, currentPath: string) {
+  initialRoutes(baseElement: HTMLElement, currentPath: string) : void {
     this.render(baseElement, currentPath);
 
     window.onpopstate = () => {
@@ -57,7 +65,7 @@ class SpaRouter {
     };
   }
 
-  historyRouterPush(pathName: string) {
+  historyRouterPush(pathName: string) : void {
     window.history.pushState({}, pathName, window.location.origin + pathName);
   }
 }
