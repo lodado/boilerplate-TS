@@ -9,9 +9,9 @@ import { state, divTags } from '@Interfaces/interfaces';
  * @param {Difunc} Object DI(Dependency injection)용 함수, 변수 넣는 객체
  **/
 export default class Component {
-  public state: any = StateController.state;
+  public state: state = StateController.state;
 
-  public backGround: any;
+  public backGround: undefined | string;
 
   public nowTarget: undefined | null | Element;
 
