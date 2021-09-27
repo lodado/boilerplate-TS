@@ -1,7 +1,6 @@
 import 'Scss/style.scss';
 
 import { TypeClass, SpaRouter } from './SpaRouter';
-
 import storetest from '@Component/storetest/';
 
 class App extends SpaRouter {

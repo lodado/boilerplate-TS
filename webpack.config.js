@@ -45,6 +45,7 @@ module.exports = {
     alias: {
       '@Component': path.resolve(__dirname, jsPath, 'component'),
       Scss: path.resolve(__dirname, cssPath),
+      '@Interfaces': path.resolve(__dirname, jsPath, 'interfaces'),
     },
 
     extensions: ['.tsx', '.ts', '.js'],

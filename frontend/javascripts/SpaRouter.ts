@@ -1,12 +1,18 @@
 import StateController from './StateController';
+import { state } from '@Interfaces/interfaces';
+import Component from '@Component/component';
 
 class TypeClass {
-  constructor(public className: any, public body: any, public store: any) {}
+  constructor(
+    public className: any,
+    public body: HTMLElement,
+    public store: state
+  ) {}
 }
 
 class SpaRouter {
   protected $body: HTMLElement;
-  protected store: any;
+  protected store: state;
   protected stackPath: Array<string>;
   protected routes: any;
 

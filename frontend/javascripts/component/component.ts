@@ -1,5 +1,5 @@
 import StateController from '../StateController';
-
+import { state, divTags } from '@Interfaces/interfaces';
 /**
  * 메뉴 항목을 추가한다.
  * @param {HtmlElement} id 부모 Element (HTML ELEMENT)
@@ -17,8 +17,8 @@ export default class Component {
 
   constructor(
     public $target: Element,
-    public props: any,
-    public position: any,
+    public props: state,
+    public position: divTags,
     public Difunc: any = undefined
   ) {
     this.setBackground();
@@ -26,7 +26,7 @@ export default class Component {
   }
 
   setBackground(): void {
-    this.position = {};
+    //set position
   }
 
   setup(): void {
@@ -46,7 +46,7 @@ export default class Component {
 
   //background
   async backGroundTemplate(): Promise<string> {
-    const arr = Object.entries(this.position);
+    const arr: Array<any> = Object.entries(this.position);
 
     if (arr.length <= 0) return await this.template();
 
@@ -75,12 +75,12 @@ export default class Component {
   mount(): void {}
 
   //버블링 사용
-  addEvent(eventType: any, selector: any, callback: Function): void {
-    const children: Array<any> = [
+  addEvent(eventType: string, selector: string, callback: Function): void {
+    const children: Array<Element> = [
       ...(this.$target.querySelectorAll(selector) as any),
     ];
 
-    const isTarget = (target: any) =>
+    const isTarget = (target: Element) =>
       children.includes(target) || target.closest(selector);
 
     this.$target.addEventListener(eventType, (event: any) => {

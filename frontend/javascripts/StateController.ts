@@ -1,15 +1,10 @@
-interface state {
-  [index: string]: string | number;
-
-  a: any;
-  b: any;
-}
-
+import { state } from '@Interfaces/interfaces';
 class StateController {
   public state: state;
 
   private cursor: Function | undefined | null = undefined;
-  public observers: any = new Set();
+
+  public observers: any = new Set<any>();
 
   constructor() {
     this.state = {
@@ -24,11 +19,10 @@ class StateController {
     return () => {
       cancelAnimationFrame(currentCallback);
       currentCallback = requestAnimationFrame(callback);
-    }
+    };
   };
 
   observe(callback: Function) {
-    
     this.cursor = this.debounceFrame(callback);
     callback();
     this.cursor = null;
@@ -50,8 +44,6 @@ class StateController {
         },
 
         set(value) {
-          console.log(value);
-
           if (_value === value) return;
           if (JSON.stringify(_value) === JSON.stringify(value)) return;
 
