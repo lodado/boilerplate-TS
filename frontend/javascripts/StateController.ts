@@ -18,16 +18,17 @@ class StateController {
     };
   }
 
-  debounceFrame = (callback: Function) => {
+  debounceFrame = (callback: any) => {
     let currentCallback: number = -1;
 
     return () => {
       cancelAnimationFrame(currentCallback);
-      currentCallback = requestAnimationFrame(() => callback);
-    };
+      currentCallback = requestAnimationFrame(callback);
+    }
   };
 
   observe(callback: Function) {
+    
     this.cursor = this.debounceFrame(callback);
     callback();
     this.cursor = null;
@@ -49,6 +50,8 @@ class StateController {
         },
 
         set(value) {
+          console.log(value);
+
           if (_value === value) return;
           if (JSON.stringify(_value) === JSON.stringify(value)) return;
 

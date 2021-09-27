@@ -102,6 +102,7 @@ module.exports = {
       },
       */
 
+      /*
       {
         test: /\.js/,
         include: [path.resolve(jsPath)],
@@ -115,6 +116,7 @@ module.exports = {
           },
         },
       },
+      */
 
       {
         test: /\.s[ac]ss$/i,

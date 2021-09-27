@@ -3,17 +3,15 @@ import 'Scss/style.scss';
 import { TypeClass, SpaRouter } from './SpaRouter';
 
 import storetest from '@Component/storetest/';
-import storetest1 from '@Component/storetest2/index';
 
 class App extends SpaRouter {
-  setRoutes() {
+  setRoutes(): void {
     this.routes = {
       '/': [new TypeClass(storetest, this.$body, this.store)],
-      '/search': [new TypeClass(storetest1, this.$body, this.store)],
     };
   }
 
-  addRouterEvent() {
+  addRouterEvent(): void {
     window.addEventListener('click', ({ target }: any) => {
       if (target.classList.contains('rootBtn')) {
         this.notify('/');

@@ -1,4 +1,4 @@
-import StateController from '../StateController.js';
+import StateController from '../StateController';
 
 /**
  * 메뉴 항목을 추가한다.
@@ -9,30 +9,27 @@ import StateController from '../StateController.js';
  * @param {Difunc} Object DI(Dependency injection)용 함수, 변수 넣는 객체
  **/
 export default class Component {
-  $target;
-  state = StateController.state;
-  props;
-  position;
-  Difunc;
+  public state: any = StateController.state;
 
-  backGround;
-  nowTarget;
+  public backGround: any;
 
-  constructor($target, props, position, Difunc = undefined) {
-    this.$target = $target;
-    this.props = props;
-    this.position = position;
-    this.Difunc = Difunc;
+  public nowTarget: undefined | null | Element;
 
+  constructor(
+    public $target: Element,
+    public props: any,
+    public position: any,
+    public Difunc: any = undefined
+  ) {
     this.setBackground();
     this.setup();
   }
 
-  setBackground() {
+  setBackground(): void {
     this.position = {};
   }
 
-  setup() {
+  setup(): void {
     this.props = StateController.observable(this.props);
 
     StateController.observe(async () => {
@@ -43,12 +40,12 @@ export default class Component {
   }
 
   //내부 구성
-  async template() {
+  async template(): Promise<string> {
     return '';
   }
 
   //background
-  async backGroundTemplate() {
+  async backGroundTemplate(): Promise<string> {
     const arr = Object.entries(this.position);
 
     if (arr.length <= 0) return await this.template();
@@ -64,7 +61,7 @@ export default class Component {
     }>${await this.template()}</div>`;
   }
 
-  async render() {
+  async render(): Promise<void> {
     this.nowTarget = this.$target.querySelector(`#${this.position.id}`);
     const template = await this.backGroundTemplate();
 
@@ -73,18 +70,20 @@ export default class Component {
     } else this.$target.insertAdjacentHTML('beforeend', template);
   }
 
-  setEvent() {}
+  setEvent(): void {}
 
-  mount() {}
+  mount(): void {}
 
   //버블링 사용
-  addEvent(eventType, selector, callback) {
-    const children = [...this.$target.querySelectorAll(selector)];
+  addEvent(eventType: any, selector: any, callback: Function): void {
+    const children: Array<any> = [
+      ...(this.$target.querySelectorAll(selector) as any),
+    ];
 
-    const isTarget = (target) =>
+    const isTarget = (target: any) =>
       children.includes(target) || target.closest(selector);
 
-    this.$target.addEventListener(eventType, (event) => {
+    this.$target.addEventListener(eventType, (event: any) => {
       if (!isTarget(event.target)) return false;
 
       callback(event);

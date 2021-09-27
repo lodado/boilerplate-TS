@@ -1,4 +1,4 @@
-import StateController from './StateController.js';
+import StateController from './StateController';
 
 class TypeClass {
   constructor(public className: any, public body: any, public store: any) {}
