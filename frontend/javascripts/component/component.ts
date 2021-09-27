@@ -1,5 +1,6 @@
 import StateController from '../StateController';
 import { state, divTags } from '@Interfaces/interfaces';
+
 /**
  * 메뉴 항목을 추가한다.
  * @param {HtmlElement} id 부모 Element (HTML ELEMENT)
@@ -8,12 +9,12 @@ import { state, divTags } from '@Interfaces/interfaces';
  * @param {position} Object 자신 background attribute들
  * @param {Difunc} Object DI(Dependency injection)용 함수, 변수 넣는 객체
  **/
-export default class Component {
+export default abstract class Component {
   public state: state = StateController.state;
 
-  public backGround: undefined | string;
+  public backGround?: string;
 
-  public nowTarget: undefined | null | Element;
+  public nowTarget?: null | Element;
 
   constructor(
     public $target: Element,
@@ -25,9 +26,17 @@ export default class Component {
     this.setup();
   }
 
-  setBackground(): void {
-    //set position
-  }
+  //set position
+  abstract setBackground(): void;
+
+  //내부 구성
+  abstract template(): Promise<string>;
+
+  //not must
+  setEvent(): void {}
+
+  //not must
+  mount(): void {}
 
   setup(): void {
     this.props = StateController.observable(this.props);
@@ -37,11 +46,6 @@ export default class Component {
       this.setEvent();
       this.mount();
     });
-  }
-
-  //내부 구성
-  async template(): Promise<string> {
-    return '';
   }
 
   //background
@@ -69,10 +73,6 @@ export default class Component {
       this.nowTarget.outerHTML = template;
     } else this.$target.insertAdjacentHTML('beforeend', template);
   }
-
-  setEvent(): void {}
-
-  mount(): void {}
 
   //버블링 사용
   addEvent(eventType: string, selector: string, callback: Function): void {
