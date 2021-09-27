@@ -38,15 +38,16 @@ module.exports = {
     path: path.join(__dirname, 'bundle'),
     filename: 'bundle.js',
     publicPath: './',
+    pathinfo: false,
   },
 
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-
     alias: {
-      Component: path.resolve(__dirname, jsPath, 'component'),
+      '@Component': path.resolve(__dirname, jsPath, 'component'),
       Scss: path.resolve(__dirname, cssPath),
     },
+
+    extensions: ['.tsx', '.ts', '.js'],
   },
 
   plugins: [
@@ -83,7 +84,6 @@ module.exports = {
 
   module: {
     rules: [
-
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
@@ -95,10 +95,12 @@ module.exports = {
         type: 'asset/resource',
       },
 
+      /*
       {
         test: /\.hbs$/,
         loader: 'handlebars-loader',
       },
+      */
 
       {
         test: /\.js/,

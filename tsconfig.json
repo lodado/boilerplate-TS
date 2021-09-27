@@ -1,20 +1,27 @@
 {
-    "compilerOptions": {
-        "noImplicitAny": true,
-        "removeComments": true,
-        "preserveConstEnums": true,
-        "module": "commonjs",
-    	"target": "es5",
-    "allowJs": true,
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "module": "commonjs",
+    "target": "es5",
     "moduleResolution": "node",
     "sourceMap": true,
 
-    },
-    "include": [
-        "frontend/javascripts/**/*"
-    ],
-    "exclude": [
-        "node_modules",
-        "**/*.spec.ts"
-    ]
+    "strict": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+
+    "baseUrl": "./",
+    "paths": {
+      "@Component/*": ["./frontend/javascripts/component/*"]
+    }
+  },
+
+  "include": ["frontend/javascripts/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
