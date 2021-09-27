@@ -15,6 +15,8 @@ const hbsPath = jsRoute + '/hbs/';
 
 const imgs = glob.sync(imgPath + '*');
 const js = [jsPath + 'app.js'];
+const ts = [jsPath + 'app.ts'];
+
 const hbs = glob.sync(hbsPath + '*.hbs');
 
 const css = glob.sync(cssPath + '*.css');
@@ -29,7 +31,7 @@ module.exports = {
 
   // enntry file
   entry: {
-    main: ['@babel/polyfill', ...js],
+    main: ['@babel/polyfill', ...ts],
   },
   // 컴파일 + 번들링된 js 파일이 저장될 경로와 이름 지정
   output: {
@@ -39,6 +41,8 @@ module.exports = {
   },
 
   resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+
     alias: {
       Component: path.resolve(__dirname, jsPath, 'component'),
       Scss: path.resolve(__dirname, cssPath),
@@ -79,6 +83,13 @@ module.exports = {
 
   module: {
     rules: [
+
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
         type: 'asset/resource',
