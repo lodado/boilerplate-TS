@@ -1,25 +1,39 @@
-import 'Scss/style.scss';
-
 import { TypeClass, SpaRouter } from './SpaRouter';
-import storetest from '@Component/storetest/';
+import main from '@View/main/';
 
 class App extends SpaRouter {
   setRoutes(): void {
     this.routes = {
-      '/': [new TypeClass(storetest, this.$body, this.store)],
+      '/': {
+        html: [new TypeClass(main, this.$app, this.observableStore)],
+        animation: '',
+      },
     };
   }
 
   addRouterEvent(): void {
+    this.LoginCheckPath = ['write'];
+
     window.addEventListener('click', ({ target }: any) => {
-      if (target.classList.contains('rootBtn')) {
+      Object.keys(this.routes).some((ele) => {
+        if (ele.length > 1) {
+          return this.routingEvent(target, ele);
+        }
+        return false;
+      });
+
+      if (target.classList.contains('goback')) {
+        history.back();
+      } else if (target.classList.contains('root')) {
         this.notify('/');
       }
-
-      if (target.classList.contains('searchBtn')) {
-        this.notify('/search');
-      }
     });
+  }
+
+  preventHistoryPush(pathName: string): boolean {
+    const preventArr = ['write', 'login'];
+
+    return preventArr.some((ele) => `/${ele}` === pathName);
   }
 }
 

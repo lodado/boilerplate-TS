@@ -31,7 +31,8 @@ module.exports = {
 
   // enntry file
   entry: {
-    main: ['@babel/polyfill', ...ts],
+    //main: ['@babel/polyfill', ...ts],
+    main: [...ts],
   },
   // 컴파일 + 번들링된 js 파일이 저장될 경로와 이름 지정
   output: {
@@ -44,11 +45,13 @@ module.exports = {
   resolve: {
     alias: {
       '@Component': path.resolve(__dirname, jsPath, 'component'),
-      Scss: path.resolve(__dirname, cssPath),
-      '@Interfaces': path.resolve(__dirname, jsPath, 'interfaces'),
+      '@Scss': path.resolve(__dirname, cssPath),
+      '@Interface': path.resolve(__dirname, jsPath, 'interface'),
+      '@Images': path.resolve(__dirname, jsPath, 'images'),
+      '@View': path.resolve(__dirname, jsPath, 'view'),
     },
 
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.jsx', '.sass', '.scss', '.css', '.tsx', '.ts', '.js'],
   },
 
   plugins: [
@@ -134,8 +137,13 @@ module.exports = {
             loader: 'resolve-url-loader',
             options: { removeCR: true },
           },
-
-          'sass-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              webpackImporter: true,
+              //additionalData: `@import "./frontend/stylesheets/style.scss";`,
+            },
+          },
         ],
         exclude: /node_modules/,
       },

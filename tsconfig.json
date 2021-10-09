@@ -19,7 +19,10 @@
     "baseUrl": "./",
     "paths": {
       "@Component/*": ["./frontend/javascripts/component/*"],
-      "@Interfaces/*": ["./frontend/javascripts/interfaces/*"]
+      "@Interface/*": ["./frontend/javascripts/interface/*"],
+      "@Images/*": ["./frontend/javascripts/images/*"],
+      "@View/*": ["./frontend/javascripts/view/*"],
+      "@scss/*": ["./frontend/stylesheets/*"]
     }
   },
 

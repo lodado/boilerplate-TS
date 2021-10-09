@@ -1,16 +1,21 @@
-import { state } from '@Interfaces/interfaces';
+import { observableStore, nonObservableStore } from '@Interface/common';
+
 class StateController {
-  public state: state;
+  public observableStore: observableStore;
+  public nonObservableStore: nonObservableStore;
 
   private cursor: Function | undefined | null = undefined;
-
-  public observers: any = new Set<any>();
+  public observers: any;
 
   constructor() {
-    this.state = {
+    this.observableStore = {
       a: 10,
       b: 20,
     };
+
+    this.nonObservableStore = {};
+
+    this.init();
   }
 
   debounceFrame = (callback: any) => {
@@ -28,7 +33,7 @@ class StateController {
     this.cursor = null;
   }
 
-  observable(obj: state) {
+  observable(obj: observableStore) {
     const that = this;
 
     const observer: Array<Function> = that.observers[JSON.stringify(obj)] || [];
@@ -39,7 +44,10 @@ class StateController {
 
       Object.defineProperty(obj, key, {
         get() {
-          if (that.cursor) observer.push(that.cursor);
+          if (that.cursor) {
+            observer.push(that.cursor);
+          }
+
           return _value;
         },
 
@@ -56,6 +64,10 @@ class StateController {
     that.observers[JSON.stringify(obj)] = observer;
 
     return obj;
+  }
+
+  init(): void {
+    this.observers = new Set<any>();
   }
 }
 

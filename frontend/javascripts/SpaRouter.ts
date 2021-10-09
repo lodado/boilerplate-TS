@@ -1,72 +1,112 @@
 import StateController from './StateController';
-import { state } from '@Interfaces/interfaces';
-
-class TypeClass {
-  constructor(
-    public className: any,
-    public body: HTMLElement,
-    public store: state
-  ) {}
-}
+import {
+  TypeClass,
+  observableStore,
+  nonObservableStore,
+} from '@Interface/common';
 
 abstract class SpaRouter {
-
+  protected $app: HTMLElement;
   protected $body: HTMLElement;
-  protected store: state;
-  protected stackPath: Array<string>;
-  protected routes: any;
+
+  protected observableStore: observableStore;
+  protected nonObservableStore: nonObservableStore;
+
+  protected routes?: any;
+  protected LoginCheckPath?: Array<string> = [];
 
   constructor() {
+    this.$app = document.querySelector('#app')!;
     this.$body = document.querySelector('body')!;
-    this.store = StateController.state;
-
-    this.stackPath = [window.location.pathname];
+    this.observableStore = StateController.observableStore;
+    this.nonObservableStore = StateController.nonObservableStore;
 
     this.setRoutes();
 
-    this.notify(this.stackPath[0]);
+    this.notify(window.location.pathname);
     this.addRouterEvent();
+
+    window.onpopstate = () => this.render(this.$app, window.location.pathname);
   }
 
-  abstract setRoutes() : void;
+  abstract setRoutes(): void;
 
-  abstract addRouterEvent() : void;
+  abstract addRouterEvent(): void;
 
-  notify(currentPath: string) : void {
+  preventHistoryPush(pathName: string): boolean {
+    return false;
+  }
 
-    const nowPath: string = window.location.pathname;
+  isLoginPath(path: string): boolean {
+    return false;
+  }
 
-    if(nowPath === currentPath){
-
-      return;
-    }
-
+  notify(currentPath: string): void {
     this.historyRouterPush(currentPath);
-    this.initialRoutes(this.$body, currentPath);
+    this.render(this.$app, currentPath);
   }
 
-  render(baseElement: HTMLElement, pathName: string = '/') : void {
+  render(baseElement: HTMLElement, pathName: string = '/'): void {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+
+    this.setBackGround(baseElement);
     baseElement.innerHTML = '';
 
-    const now = this.routes[pathName];
+    const nowRoutingTarget = this.routes[pathName];
+    const { html, animation } = nowRoutingTarget;
 
-    now.map((ele: TypeClass) => {
+    StateController.init();
+
+    this.reAnimationByReflow(baseElement, animation);
+
+    html.map((ele: TypeClass) => {
       new ele.className(ele.body, ele.store);
     });
   }
 
-  initialRoutes(baseElement: HTMLElement, currentPath: string) : void {
-    this.render(baseElement, currentPath);
+  setBackGround(baseElement: HTMLElement) {
+    const cloneElement: any = baseElement.cloneNode(true);
 
-    window.onpopstate = () => {
-      const now: string = this.stackPath.pop()!;
-      this.render(baseElement, now);
-      this.stackPath.push(now);
-    };
+    cloneElement.className = '';
+    cloneElement.classList.add('clone');
+
+    this.$body.appendChild(cloneElement);
+
+    setTimeout(() => {
+      cloneElement.remove();
+    }, 500);
   }
 
-  historyRouterPush(pathName: string) : void {
+  reAnimationByReflow(target: HTMLElement, animation: undefined | string) {
+    if (!animation) return;
+
+    target.className = '';
+    void target.offsetWidth;
+    target.classList.add(animation);
+  }
+
+  historyRouterPush(pathName: string): void {
+    if (this.preventHistoryPush(pathName)) return;
+
     window.history.pushState({}, pathName, window.location.origin + pathName);
+  }
+
+  routingEvent(target: Element, text: string): boolean {
+    let cond: string;
+
+    if (text.startsWith('/')) cond = text.substr(1, text.length);
+    else cond = text;
+
+    if (target.classList.contains(cond)) {
+      if (this.isLoginPath(cond)) {
+        this.notify('/login');
+      } else {
+        this.notify(text);
+      }
+      return true;
+    }
+
+    return false;
   }
 }
 
