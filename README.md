@@ -58,7 +58,7 @@ flex 패턴을 사용하지 않았습니다.
 ## 시작 방법
 
 ```
-git clone https://github.com/lodado/boilerplate
+git clone https://github.com/lodado/boilerplate-TS
 
 cd boilerplate
 
